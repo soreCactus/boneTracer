@@ -15,12 +15,13 @@ var lookAreaSize = 40;
 var isDrawing = false;
 
 function setup() {
-    console.log("Hay");
+    console.log("Dom");
     createCanvas(windowWidth, windowHeight);
     drawing = createGraphics(width, height);
     ui = createGraphics(width, height);
     lookAreax = width / 2;
     lookAreay = height /2;
+    console.log(lookAreay);
     //drawing.background(100);
     capture = createCapture(VIDEO);
     capture.size(width, height);
@@ -30,6 +31,7 @@ function setup() {
 }
 
 function draw() {
+    console.log(lookAreay);
     xOfPoints = [];
     yOfPoints = [];
     avex = 0;
@@ -41,10 +43,14 @@ function draw() {
     //console.log(pixelsLength);
     noStroke();
     fill("orange");
-    for (var y = lookAreay;y < lookAreay + lookAreaSize;y+= stepSize) {
+    for (var y = lookAreay;y < lookAreay + lookAreaSize;y+= stepSize) {         //search lookArea
         for (var x = lookAreax; x < lookAreax + lookAreaSize;x+= stepSize) {
             var index = (x + y * capture.width)*4;
-            if (capture.pixels[index] > cutoff) {
+            fill("white");
+            ellipse(x,y,3);
+            console.log("red" + capture.pixels[index]);
+            console.log("green" + capture.pixels[index + 1]);
+            if (capture.pixels[index] > cutoff && capture.pixels[index + 1] < 200) {
                 //console.log("found color");
                 xOfPoints.push(x);
                 yOfPoints.push(y);
@@ -53,7 +59,7 @@ function draw() {
         }
     }
     
-    if (xOfPoints.length > 0) {
+    if (xOfPoints.length > 0) {                           //get average of passing points
         for (var i = 0;i < xOfPoints.length;i++)  {
             avex += xOfPoints[i];
         }  
@@ -66,7 +72,7 @@ function draw() {
         ellipse(avex,avey,12);
     }
     
-    if (keyIsDown(32)) {
+    if (mouseIsPressed && avex != 0 && avey != 0) {                                  //tracing
         drawing.noStroke();
         drawing.fill("yellow");
         drawing.ellipse(avex,avey,1);
@@ -78,7 +84,8 @@ function draw() {
         lastPointx = avex;
         lastPointy = avey;
     }
-    image(ui,0,0);
+    
+    image(ui,0,0);                                       //draw lookArea
     findStylus();
     image(drawing,0,0);
     if (avex != 0 && avey != 0) {
@@ -87,7 +94,7 @@ function draw() {
         
     }
 //    console.log("xOfPoints: " + xOfPoints);
-//    console.log("avex: " + avex);
+    console.log("avex: " + avex);
 //    console.log("lookAreaX: " + lookAreax);
     
 }
@@ -104,8 +111,9 @@ function keyReleased() {
     }
 }
 
-function keyPressed() {
+function keyPressed() {                                  //clear drawing
     if (keyCode == 16) {
+        saveCanvas(img,png);
         drawing.background(0,0);
     }
 }
