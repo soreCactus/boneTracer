@@ -48,8 +48,8 @@ function draw() {
             var index = (x + y * capture.width)*4;
             fill("white");
             ellipse(x,y,3);
-            console.log("red" + capture.pixels[index]);
-            console.log("green" + capture.pixels[index + 1]);
+            //console.log("red" + capture.pixels[index]);
+            //console.log("green" + capture.pixels[index + 1]);
             if (capture.pixels[index] > cutoff && capture.pixels[index + 1] < 200) {
                 //console.log("found color");
                 xOfPoints.push(x);
