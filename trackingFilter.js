@@ -72,7 +72,7 @@ function draw() {
         ellipse(avex,avey,12);
     }
     
-    if (mouseIsPressed && avex != 0 && avey != 0) {                                  //tracing
+    if ((mouseIsPressed || touches.length > 0) && (avex != 0 && avey != 0)) {                                  //tracing
         drawing.noStroke();
         drawing.fill("yellow");
         drawing.ellipse(avex,avey,1);
